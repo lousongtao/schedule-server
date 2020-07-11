@@ -29,9 +29,9 @@ public class UserServiceImpl implements UserService {
     private UserTimeRepository userTimeRepository;
 
     @Override
-    public List<UserTime> queryUserTime(String userName, Date date) {
-        List<UserTime> userTimes = userTimeRepository.findByUserAndDate(userName, date);
-        return null;
+    public ResponseBody<List<UserTime>> queryUserTime(int userId, Date date1, Date date2) {
+        List<UserTime> userTimes = userTimeRepository.findByUserAndDateRange(userId, date1, date2);
+        return new ResponseBody(true, null, userTimes);
     }
 
 //    private List<TimeSlot> getTimeSlots(String startTime, String endTime) {
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public ResponseBody saveUserTime(RqbUserTime rqbUserTime) {
-        User user = userRepository.findByName(rqbUserTime.getUserName());
+        User user = userRepository.findById(rqbUserTime.getUserId()).get();
         TimeSlot timeSlot = timeSlotRepository.findById(rqbUserTime.getTimeSlotId()).get();
         UserTime ut = null;
         if (rqbUserTime.getId() > 0) {
@@ -76,5 +76,11 @@ public class UserServiceImpl implements UserService {
         }
         user = userRepository.save(user);
         return new ResponseBody(true);
+    }
+
+    @Override
+    public ResponseBody queryUsers() {
+        List<User> users = userRepository.findAll();
+        return new ResponseBody(true, null, users);
     }
 }

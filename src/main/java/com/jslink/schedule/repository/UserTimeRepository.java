@@ -8,6 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface UserTimeRepository extends JpaRepository<UserTime, Integer> {
-    @Query(value = "select ut from UserTime ut where ut.user.name = :userName and ut.date = :date order by ut.timeSlot.id")
-    List<UserTime> findByUserAndDate(String userName, Date date);
+    @Query(value = "select ut from UserTime ut where ut.user.id = :userId and ut.date > :startDate and ut.date < :endDate order by ut.timeSlot.id")
+    List<UserTime> findByUserAndDateRange(int userId, Date startDate, Date endDate);
 }

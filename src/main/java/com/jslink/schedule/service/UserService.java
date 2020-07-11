@@ -9,9 +9,11 @@ import java.util.Date;
 import java.util.List;
 
 public interface UserService {
-    List<UserTime> queryUserTime(String userName, Date date);
+    ResponseBody<List<UserTime>> queryUserTime(int userId, Date date1, Date date2);
 
     ResponseBody saveUserTime(RqbUserTime rqbUserTime);
 
     ResponseBody saveUser(RqbUser user);
+
+    ResponseBody queryUsers();
 }

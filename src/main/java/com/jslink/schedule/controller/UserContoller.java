@@ -15,10 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
-@RequestMapping("/user")
+@RequestMapping("/users")
 @RestController
 @Api(value = "user", tags = {"user"}, produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserContoller {
@@ -28,7 +28,13 @@ public class UserContoller {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/")
+    @GetMapping("")
+    @ApiOperation(value = "Query users", response = List.class, httpMethod = "GET", authorizations = {@Authorization(value = "basicAuth")})
+    public ResponseBody queryUsers(){
+        return userService.queryUsers();
+    }
+
+    @PostMapping("")
     @ApiOperation(value = "Load user time", response = List.class, httpMethod = "POST", authorizations = {@Authorization(value = "basicAuth")})
     public ResponseBody saveUser(@ApiParam(name = "user", value = "user body")
                                      @RequestParam(name = "user")RqbUser user){
@@ -37,17 +43,19 @@ public class UserContoller {
 
     @GetMapping("/usertime")
     @ApiOperation(value = "Load user time", response = List.class, httpMethod = "GET", authorizations = {@Authorization(value = "basicAuth")})
-    public List<UserTime> queryStaffTime(@ApiParam(name = "userName", value = "user name")
-                                              @RequestParam(name = "userName") String userName,
-                                          @ApiParam(name = "date", value = "day time")
-                                          @RequestParam(name = "startTime") Date date){
-        return userService.queryUserTime(userName, date);
+    public ResponseBody<List<UserTime>> queryStaffTime(@ApiParam(name = "userId", value = "user id")
+                                              @RequestParam(name = "userId") int userId,
+                                          @ApiParam(name = "startDate", value = "day time")
+                                          @RequestParam(name = "startDate") Date startDate,
+                                         @ApiParam(name = "endDate", value = "day time")
+                                             @RequestParam(name = "endDate") Date endDate){
+        return userService.queryUserTime(userId, startDate, endDate);
     }
 
     @PostMapping("/usertime")
     @ApiOperation(value = "Load user time", response = List.class, httpMethod = "POST", authorizations = {@Authorization(value = "basicAuth")})
-    public ResponseBody saveStaffTime(@ApiParam(name = "rqbUserTime", value = "body of user name")
-                                          @RequestParam(name = "rqbUserTime")RqbUserTime rqbUserTime){
+    public ResponseBody saveUserTime(@ApiParam(name = "rqbUserTime", value = "body of user name")
+                                          @RequestBody RqbUserTime rqbUserTime){
         return userService.saveUserTime(rqbUserTime);
     }
 }
