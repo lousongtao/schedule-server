@@ -6,9 +6,8 @@ import java.util.Date;
 
 @Data
 public class RqbUserTime {
-    private int id;
     private int userId;
     private int timeSlotId;
-    private Date date;
-    private boolean isAvailable;
+    private String date;
+    private boolean available;
 }

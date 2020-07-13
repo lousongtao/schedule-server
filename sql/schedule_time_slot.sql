@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: schedule
+-- Host: localhost    Database: schedule
 -- ------------------------------------------------------
 -- Server version	5.7.16-log
 
@@ -35,7 +35,7 @@ CREATE TABLE `time_slot` (
 
 LOCK TABLES `time_slot` WRITE;
 /*!40000 ALTER TABLE `time_slot` DISABLE KEYS */;
-INSERT INTO `time_slot` VALUES (1,'8.00-9.00'),(2,'9.00-10.00');
+INSERT INTO `time_slot` VALUES (1,'8.30-9.30'),(2,'9.30-10.30');
 /*!40000 ALTER TABLE `time_slot` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-10 15:57:37
+-- Dump completed on 2020-07-13  0:09:03

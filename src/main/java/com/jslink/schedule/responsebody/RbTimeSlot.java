@@ -10,5 +10,5 @@ import java.util.List;
 public class RbTimeSlot {
     private int timeSlotId;
     private String timeSlot;
-    private List<User> scheduledUsers = new ArrayList<>();//已经排版的人员
+
 }

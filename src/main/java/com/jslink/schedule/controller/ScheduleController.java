@@ -1,6 +1,7 @@
 package com.jslink.schedule.controller;
 
 import com.jslink.schedule.responsebody.RbSchedule;
+import com.jslink.schedule.responsebody.ResponseBody;
 import com.jslink.schedule.service.ScheduleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @RequestMapping("/schedule")
@@ -26,11 +27,11 @@ public class ScheduleController {
 
     @GetMapping("/byday")
     @ApiOperation(value = "Load schedule", response = List.class, httpMethod = "GET", authorizations = {@Authorization(value = "basicAuth")})
-    public List<RbSchedule> queryScheduleByDayRange(@ApiParam(name = "startTime", value = "start time")
-                                          @RequestParam(name = "startTime") String startTime,
-                                          @ApiParam(name = "endTime", value = "end time")
-                                          @RequestParam(name = "endTime") String endTime){
-        return scheduleService.queryScheduleByDayRange(startTime, endTime);
+    public ResponseBody<List<RbSchedule>> queryScheduleByDayRange(@ApiParam(name = "startDate", value = "start date")
+                                          @RequestParam(name = "startDate") Date startDate,
+                                          @ApiParam(name = "endDate", value = "end date")
+                                          @RequestParam(name = "endDate") Date endDate){
+        return scheduleService.queryScheduleByDayRange(startDate, endDate);
     }
 
     @GetMapping("/bymonth/{month}")
@@ -41,24 +42,26 @@ public class ScheduleController {
     }
 
     @PostMapping("/arrangeschedule")
-    @ApiOperation(value = "Arrange schedule", response = List.class, httpMethod = "GET", authorizations = {@Authorization(value = "basicAuth")})
-    public List<RbSchedule> arrangeSchedule(@ApiParam(name = "date", value = "date")
-                                            @RequestParam(name = "date") Date date,
-                                            @ApiParam(name = "timeSlotId", value = "time slot id")
-                                            @RequestParam(name = "timeSlotId") int timeSlotId,
-                                          @ApiParam(name = "user", value = "user name")
-                                          @RequestParam(name = "user") String user){
-        return scheduleService.arrangeSchedule(date, timeSlotId, user);
+    @ApiOperation(value = "Arrange schedule", response = List.class, httpMethod = "POST", authorizations = {@Authorization(value = "basicAuth")})
+    public ResponseBody arrangeSchedule(
+            @ApiParam(name = "date", value = "date")
+            @RequestParam(name = "date") Date date,
+            @ApiParam(name = "timeSlotId", value = "time slot id")
+            @RequestParam(name = "timeSlotId") int timeSlotId,
+            @ApiParam(name = "userId", value = "user id")
+            @RequestParam(name = "userId") int userId){
+        return scheduleService.arrangeSchedule(date, timeSlotId, userId);
     }
 
     @DeleteMapping("/arrangeschedule")
-    @ApiOperation(value = "Arrange schedule", response = List.class, httpMethod = "GET", authorizations = {@Authorization(value = "basicAuth")})
-    public List<RbSchedule> deleteSchedule(@ApiParam(name = "date", value = "date")
-                                            @RequestParam(name = "date") Date date,
-                                            @ApiParam(name = "timeSlotId", value = "time slot id")
-                                            @RequestParam(name = "timeSlotId") int timeSlotId,
-                                            @ApiParam(name = "user", value = "user name")
-                                            @RequestParam(name = "user") String user){
-        return scheduleService.deleteSchedule(date, timeSlotId, user);
+    @ApiOperation(value = "Arrange schedule", response = List.class, httpMethod = "DELETE", authorizations = {@Authorization(value = "basicAuth")})
+    public ResponseBody deleteSchedule(
+            @ApiParam(name = "date", value = "date")
+            @RequestParam(name = "date") Date date,
+            @ApiParam(name = "timeSlotId", value = "time slot id")
+            @RequestParam(name = "timeSlotId") int timeSlotId,
+            @ApiParam(name = "userId", value = "user id")
+            @RequestParam(name = "userId") int userId){
+        return scheduleService.deleteSchedule(date, timeSlotId, userId);
     }
 }

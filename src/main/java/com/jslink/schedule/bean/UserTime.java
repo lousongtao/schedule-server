@@ -1,5 +1,6 @@
 package com.jslink.schedule.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,11 +18,14 @@ public class UserTime {
     @JoinColumn(name = "user_id")
     private User user;
 
+
     @OneToOne
     @JoinColumn(name = "time_slot_id")
     private TimeSlot timeSlot;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     @Column

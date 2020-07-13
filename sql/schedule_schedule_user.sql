@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: schedule
+-- Host: localhost    Database: schedule
 -- ------------------------------------------------------
 -- Server version	5.7.16-log
 
@@ -16,27 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `schedule_staff`
+-- Table structure for table `schedule_user`
 --
 
-DROP TABLE IF EXISTS `schedule_staff`;
+DROP TABLE IF EXISTS `schedule_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `schedule_staff` (
+CREATE TABLE `schedule_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `schedule_id` int(11) NOT NULL,
-  `staff_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='每个schedule对应的排班人员';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `schedule_staff`
+-- Dumping data for table `schedule_user`
 --
 
-LOCK TABLES `schedule_staff` WRITE;
-/*!40000 ALTER TABLE `schedule_staff` DISABLE KEYS */;
-/*!40000 ALTER TABLE `schedule_staff` ENABLE KEYS */;
+LOCK TABLES `schedule_user` WRITE;
+/*!40000 ALTER TABLE `schedule_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `schedule_user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-10 15:57:37
+-- Dump completed on 2020-07-13  0:09:04

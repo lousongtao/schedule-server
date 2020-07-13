@@ -1,6 +1,7 @@
 package com.jslink.schedule.service;
 
 import com.jslink.schedule.responsebody.RbSchedule;
+import com.jslink.schedule.responsebody.ResponseBody;
 
 import java.util.Date;
 import java.util.List;
@@ -8,9 +9,9 @@ import java.util.List;
 public interface ScheduleService {
     List<RbSchedule> queryScheduleByMonth(int month);
 
-    List<RbSchedule> queryScheduleByDayRange(String startTime, String endTime);
+    ResponseBody<List<RbSchedule>> queryScheduleByDayRange(Date startDate, Date endDate);
 
-    List<RbSchedule> arrangeSchedule(Date date, int timeSlotId, String user);
+    ResponseBody arrangeSchedule(Date date, int timeSlotId, int userId);
 
-    List<RbSchedule> deleteSchedule(Date date, int timeSlotId, String user);
+    ResponseBody deleteSchedule(Date date, int timeSlotId, int userId);
 }
