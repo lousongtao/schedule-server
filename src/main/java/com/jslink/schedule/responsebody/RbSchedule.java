@@ -10,11 +10,11 @@ import java.util.List;
 public class RbSchedule {
     private Date date;
     private int timeSlotId;
-    private List<String> userNames;
+    private List<Integer> userIds;
 
-    public RbSchedule(Date date, int timeSlotId, List<String> userNames) {
+    public RbSchedule(Date date, int timeSlotId, List<Integer> userIds) {
         this.date = date;
         this.timeSlotId = timeSlotId;
-        this.userNames = userNames;
+        this.userIds = userIds;
     }
 }

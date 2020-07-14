@@ -2,9 +2,11 @@ package com.jslink.schedule.serviceimpl;
 
 import com.jslink.schedule.bean.Schedule;
 import com.jslink.schedule.bean.ScheduleUser;
+import com.jslink.schedule.bean.TimeSlot;
 import com.jslink.schedule.bean.User;
 import com.jslink.schedule.repository.ScheduleRepository;
 import com.jslink.schedule.repository.ScheduleUserRepository;
+import com.jslink.schedule.repository.TimeSlotRepository;
 import com.jslink.schedule.repository.UserRepository;
 import com.jslink.schedule.responsebody.RbSchedule;
 import com.jslink.schedule.responsebody.RbTimeSlot;
@@ -29,6 +31,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     private UserRepository userRepository;
     @Autowired
     private ScheduleUserRepository scheduleUserRepository;
+    @Autowired
+    private TimeSlotRepository timeSlotRepository;
     @Override
     public List<RbSchedule> queryScheduleByMonth(int month) {
         return null;
@@ -39,8 +43,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<Schedule> schedules = scheduleRepository.findByDayRange(startDate, endDate);
         List<RbSchedule> rbSchedules = schedules.stream().map(s -> {
             List<ScheduleUser> scheduleUsers = s.getScheduleUsers();
-            List<String> userNames = scheduleUsers.stream().map(su -> su.getUser().getName()).collect(Collectors.toList());
-            RbSchedule rs = new RbSchedule(s.getDate(), s.getTimeSlot().getId(), userNames);
+            List<Integer> userIds = scheduleUsers.stream().map(su -> su.getUser().getId()).collect(Collectors.toList());
+            RbSchedule rs = new RbSchedule(s.getDate(), s.getTimeSlot().getId(), userIds);
             return rs;
         }).collect(Collectors.toList());
         return new ResponseBody<>(true, null, rbSchedules);
@@ -49,6 +53,13 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ResponseBody arrangeSchedule(Date date, int timeSlotId, int userId) {
         Schedule schedule = scheduleRepository.findByDateAndTimeSlotId(date, timeSlotId);
+        if (schedule == null){
+            schedule = new Schedule();
+            schedule.setDate(date);
+            TimeSlot ts = timeSlotRepository.findById(timeSlotId).get();
+            schedule.setTimeSlot(ts);
+            schedule = scheduleRepository.save(schedule);
+        }
         User user = userRepository.findById(userId).get();
         ScheduleUser su = new ScheduleUser();
         su.setSchedule(schedule);

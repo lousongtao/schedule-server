@@ -27,7 +27,7 @@ CREATE TABLE `schedule_user` (
   `schedule_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='每个schedule对应的排班人员';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='每个schedule对应的排班人员';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,6 +36,7 @@ CREATE TABLE `schedule_user` (
 
 LOCK TABLES `schedule_user` WRITE;
 /*!40000 ALTER TABLE `schedule_user` DISABLE KEYS */;
+INSERT INTO `schedule_user` VALUES (8,2,2),(9,2,1),(11,3,2),(12,3,1),(13,4,1),(14,4,2);
 /*!40000 ALTER TABLE `schedule_user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-13  0:09:04
+-- Dump completed on 2020-07-14  1:07:30

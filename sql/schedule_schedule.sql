@@ -27,7 +27,7 @@ CREATE TABLE `schedule` (
   `date` date NOT NULL,
   `time_slot_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='每条记录代表一天的一个时间段, 对应于界面上的一个单元格, 如2020-07-06/8.30-9.30';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='每条记录代表一天的一个时间段, 对应于界面上的一个单元格, 如2020-07-06/8.30-9.30';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,6 +36,7 @@ CREATE TABLE `schedule` (
 
 LOCK TABLES `schedule` WRITE;
 /*!40000 ALTER TABLE `schedule` DISABLE KEYS */;
+INSERT INTO `schedule` VALUES (1,'2020-07-14',1),(2,'2020-07-13',1),(3,'2020-07-14',2),(4,'2020-07-13',2);
 /*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-13  0:09:08
+-- Dump completed on 2020-07-14  1:07:33
