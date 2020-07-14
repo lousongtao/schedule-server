@@ -84,11 +84,15 @@ public class UserServiceImpl implements UserService {
             user = new User();
             user.setName(rqbUser.getName());
             user.setPassword(rqbUser.getPassword());
+            user.setAvailable(true);
         } else {
             user = userRepository.findById(rqbUser.getId()).get();
+            user.setName(rqbUser.getName());
+            user.setAvailable(rqbUser.isAvailable());
+            user.setPassword(rqbUser.getPassword());
         }
         user = userRepository.save(user);
-        return new ResponseBody(true);
+        return new ResponseBody(true, null, user);
     }
 
     @Override

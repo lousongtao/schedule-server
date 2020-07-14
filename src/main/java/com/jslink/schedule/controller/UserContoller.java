@@ -38,7 +38,7 @@ public class UserContoller {
     @PostMapping("")
     @ApiOperation(value = "save user", response = List.class, httpMethod = "POST", authorizations = {@Authorization(value = "basicAuth")})
     public ResponseBody saveUser(@ApiParam(name = "user", value = "user body")
-                                     @RequestParam(name = "user")RqbUser user){
+                                     @RequestBody RqbUser user){
         return userService.saveUser(user);
     }
 
