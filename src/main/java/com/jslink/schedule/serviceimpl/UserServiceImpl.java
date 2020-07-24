@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,20 +37,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseBody<List<RbUserTime>> queryUserTime(int userId, Date date1, Date date2) {
         List<UserTime> userTimes = userTimeRepository.findByUserAndDateRange(userId, date1, date2);
-        List<RbUserTime> rbUserTimes = userTimes.stream().map(ut -> new RbUserTime(
-                Utils.DF_YYYYMMDD.format(ut.getDate()), ut.getTimeSlot().getId(),
-                ut.getUser().getId(), ut.getUser().getName(), ut.isAvailable()))
-                .collect(Collectors.toList());
+        List<RbUserTime> rbUserTimes = userTimes.stream().map(ut -> getRbUserTime(ut)).collect(Collectors.toList());
         return new ResponseBody(true, null, rbUserTimes);
     }
-
-//    private List<TimeSlot> getTimeSlots(String startTime, String endTime) {
-//        List<TimeSlot> allts = timeSlotRepository.findAll();
-//        List<TimeSlot> tss = allts.stream().filter(ts ->{
-//            ts.get
-//        })
-//    }
-
 
     /**
      * 根据user和timeslot和date确定记录, 如果存在, 就修改, 否则, 就新增一条
@@ -73,8 +64,11 @@ public class UserServiceImpl implements UserService {
         }
         ut.setAvailable(rqbUserTime.isAvailable());
         ut = userTimeRepository.save(ut);
-        RbUserTime rut = new RbUserTime(Utils.DF_YYYYMMDD.format(ut.getDate()), ut.getTimeSlot().getId(), rqbUserTime.getUserId(), null, ut.isAvailable());
-        return new ResponseBody(true, null, rut);
+        return new ResponseBody(true, null, getRbUserTime(ut));
+    }
+
+    private RbUserTime getRbUserTime(UserTime ut){
+        return new RbUserTime(Utils.DF_YYYYMMDD.format(ut.getDate()), ut.getTimeSlot().getId(), ut.getUser().getId(), null, ut.isAvailable());
     }
 
     @Override
@@ -99,5 +93,74 @@ public class UserServiceImpl implements UserService {
     public ResponseBody queryUsers() {
         List<User> users = userRepository.findAll();
         return new ResponseBody(true, null, users);
+    }
+
+    @Override
+    public ResponseBody<List<RbUserTime>> copyUserTime(int userId, Date monday) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(monday);
+        c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH) + 6);
+        Date sunday = c.getTime();
+        c.setTime(monday);
+        userTimeRepository.deleteByUserAndDateRange(userId, monday, sunday);
+        c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH) - 7);
+        Date lastMonday = c.getTime();
+        c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH) + 6);
+        Date lastSunday = c.getTime();
+        List<UserTime> userTimes = userTimeRepository.findByUserAndDateRange(userId, lastMonday, lastSunday);
+        User user = userRepository.findById(userId).get();
+        List<RbUserTime> uts = new ArrayList<>();
+        for (UserTime ut: userTimes) {
+            UserTime ut1 = new UserTime();
+            ut1.setAvailable(ut.isAvailable());
+            c.setTime(ut.getDate());
+            c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH) + 7);
+            ut1.setDate(c.getTime());
+            ut1.setUser(user);
+            ut1.setTimeSlot(ut.getTimeSlot());
+            ut1 = userTimeRepository.save(ut1);
+            uts.add(getRbUserTime(ut1));
+        }
+        return new ResponseBody<>(true, null, uts);
+    }
+
+    /**
+     * set all time true or false
+     * if chooseAll = false, delete all time in this week;
+     * if chooseAll = true, delete all time in this week and then rebuild this week's time
+     * @param userId
+     * @param monday
+     * @param chooseAll
+     * @return
+     */
+    @Override
+    public ResponseBody<List<RbUserTime>> chooseAll(int userId, Date monday, boolean chooseAll) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(monday);
+        c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH) + 6);
+        Date sunday = c.getTime();
+        userTimeRepository.deleteByUserAndDateRange(userId, monday, sunday);
+        List<TimeSlot> tss = timeSlotRepository.findAll();
+
+        List<RbUserTime> result = new ArrayList<>();
+        if (chooseAll){
+            User user = userRepository.findById(userId).get();
+            for (int i = 0; i < 7; i++) {
+                c.setTime(monday);
+                c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH) + i);
+                Date oneday = c.getTime();
+                for(TimeSlot ts: tss) {
+                    UserTime ut = new UserTime();
+                    ut.setTimeSlot(ts);
+                    ut.setUser(user);
+                    ut.setAvailable(true);
+                    ut.setDate(oneday);
+                    userTimeRepository.save(ut);
+                    result.add(getRbUserTime(ut));
+                }
+            }
+        }
+
+        return new ResponseBody<>(true, null, result);
     }
 }

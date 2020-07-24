@@ -1,6 +1,5 @@
 package com.jslink.schedule.service;
 
-import com.jslink.schedule.bean.UserTime;
 import com.jslink.schedule.responsebody.RbUserTime;
 import com.jslink.schedule.responsebody.ResponseBody;
 import com.jslink.schedule.requestbody.RqbUser;
@@ -17,4 +16,8 @@ public interface UserService {
     ResponseBody saveUser(RqbUser user);
 
     ResponseBody queryUsers();
+
+    ResponseBody<List<RbUserTime>> copyUserTime(int userId, Date monday);
+
+    ResponseBody<List<RbUserTime>> chooseAll(int userId, Date monday, boolean chooseAll);
 }

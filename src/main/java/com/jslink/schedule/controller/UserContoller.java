@@ -59,4 +59,26 @@ public class UserContoller {
                                           @RequestBody RqbUserTime rqbUserTime){
         return userService.saveUserTime(rqbUserTime);
     }
+
+    @PostMapping("/copyusertime")
+    @ApiOperation(value = "copy user time from last week, return the copy result",
+            response = List.class, httpMethod = "POST", authorizations = {@Authorization(value = "basicAuth")})
+    public ResponseBody<List<RbUserTime>> copyUserTime(@ApiParam(name = "userId", value = "user id")
+                                                     @RequestParam(name = "userId") int userId,
+                                                 @ApiParam(name = "startDate", value = "day time")
+                                                     @RequestParam(name = "startDate") Date monday){
+        return userService.copyUserTime(userId, monday);
+    }
+
+    @PostMapping("/chooseall")
+    @ApiOperation(value = "set all time are available || unavailable, return this week result",
+            response = List.class, httpMethod = "POST", authorizations = {@Authorization(value = "basicAuth")})
+    public ResponseBody<List<RbUserTime>> chooseAll(@ApiParam(name = "userId", value = "user id")
+                                                       @RequestParam(name = "userId") int userId,
+                                                       @ApiParam(name = "startDate", value = "day time")
+                                                       @RequestParam(name = "startDate") Date monday,
+                                                    @ApiParam(name = "chooseAll", value = "set all false or true")
+                                                        @RequestParam(name = "chooseAll") boolean chooseAll){
+        return userService.chooseAll(userId, monday, chooseAll);
+    }
 }
