@@ -18,4 +18,6 @@ public class User {
     private String password;
     @Column
     private boolean available;
+    @Column
+    private int shiftTimes; //每周可以排班几次
 }
