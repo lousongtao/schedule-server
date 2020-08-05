@@ -78,11 +78,13 @@ public class UserServiceImpl implements UserService {
             user = new User();
             user.setName(rqbUser.getName());
             user.setPassword(rqbUser.getPassword());
+            user.setShiftTimes(rqbUser.getShiftTimes());
             user.setAvailable(true);
         } else {
             user = userRepository.findById(rqbUser.getId()).get();
             user.setName(rqbUser.getName());
             user.setAvailable(rqbUser.isAvailable());
+            user.setShiftTimes(rqbUser.getShiftTimes());
             user.setPassword(rqbUser.getPassword());
         }
         user = userRepository.save(user);
